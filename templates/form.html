@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<style>
+    .hidden {
+        display:none
+}
+</style>
+
+<form method="post">
+    {% csrf_token %}
+    {{ formset.management_form }}
+    <div id = "exer-form-list">
+        {% for form in formset %}
+        <div class = "exer-form">
+            {{ form }}
+        </div>
+        {% endfor %}
+    </div>
+    <div id = 'empty-form' class = 'hidden'>{{ formset.empty_form }}</div>
+    <button id="add-form" type="button">Add Another Exercise</button>
+    <button type="submit">Finish Workout Template</button>
+</form>
+
+<script>
+    const addmorebtn = document.getElementById('add-form')
+    addmorebtn.addEventListener('click',add_new_form)
+
+    function add_new_form(event) {
+        if(event) {
+            event.preventDefault()
+        }
+        const currentexerform = document.getElementsByClassName('exer-form')
+        const currentformcount = currentexerform.length
+        const formcopytarget = document.getElementById('exer-form-list')
+        const emptyFormEl = document.getElementById('empty-form').cloneNode(true)
+        emptyFormEl.setAttribute('class', 'exer-form')
+        emptyFormEl.setAttribute('id', `form-${currentformcount}`)
+
+        formcopytarget.append(emptyFormEl)
+    }
+</script>
+{% endblock %}
